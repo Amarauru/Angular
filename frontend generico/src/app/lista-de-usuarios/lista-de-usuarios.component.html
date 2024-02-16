@@ -1,0 +1,130 @@
+<!-- <po-page-edit p-title="Orçamentos" class="p-m-0"> -->
+<po-page-default p-title="Orçamentos">
+    <div class="po-row">
+        <po-input class="po-md-5" p-label="Pesquisar orçamento"
+            (p-change-model)="buscaUsuario()" p-icon="po-icon po-icon-search">
+        </po-input>
+
+        <po-button style="margin-left: auto" class="po-m-5" p-label="+ Incluir orçamento" (p-click)="criarUsuario()"
+            p-type="primary">
+        </po-button>
+    </div>
+    <po-table [p-hide-columns-manager]="true" [p-sort]="true" [p-striped]="true" p-container="light"
+        [p-columns]="colunas" [p-items]="listaUsuarios" p-container="shadow">
+    </po-table>
+</po-page-default>
+
+<po-modal #modalUsuario [p-primary-action]="confirmaUsuario" [p-secondary-action]="cancelarUsuario" p-click-out="false"
+    [p-hide-close]="true" p-title="Novo orçamento">
+    <po-divider p-label="Dados"> </po-divider>
+    <div class="po-row">
+      <po-input
+        class="po-md-4"
+        name="status"
+        
+        p-clean
+        p-label="Situação"
+        p-disabled="true"
+      >
+      </po-input>
+
+      <po-datepicker
+        class="po-md-4"
+        name="emissao"
+       
+        p-clean
+        p-label="Emissão"
+        p-disabled="true"
+      >
+      </po-datepicker>
+    </div>
+    <div class="po-row">
+      <po-select
+        class="po-md-4"
+        name="condPg"
+       
+        p-icon="po-icon po-icon-search"
+        p-label="Condição de Pagamento"
+        [p-required]="true"
+        p-sort
+        p-filter-mode="contains"
+      >
+      </po-select>
+    </div>
+
+    <po-divider p-label="Itens do orçamento"></po-divider>
+
+    <div class="po-row ">
+      
+        <po-button
+          class="po-xl-3 po-lg-3 po-md-3 po-sm-12"
+          p-label="Add Produtos"
+          p-icon="po-icon po-icon-cart"
+          p-type="primary"
+        >
+        </po-button>
+      
+    </div>
+    <div class="po-mt-5">
+      <po-table
+        [p-hide-columns-manager]="true"
+        [p-sort]="true"
+        [p-striped]="true"
+      >
+      </po-table>
+    </div>
+
+    <po-divider p-label=""> </po-divider>
+    <div class="po-row">
+      <po-textarea
+        class="po-md-8"
+        name="observacao"
+        [p-maxlength]="250"
+        p-label="Observações"
+      >
+      </po-textarea>
+    </div>
+
+    <po-divider p-label=""> </po-divider>
+    <po-divider p-label="Totais"> </po-divider>
+
+    <div class="po-row">
+      <po-decimal
+        class="po-md-6 po-lg-3"
+        name="subTotal"
+       
+        p-label="Total"
+        p-disabled
+      >
+      </po-decimal>
+
+      <po-decimal
+        class="po-md-6 po-lg-3"
+        name="Total"
+       
+        p-label="Total + Impostos "
+        p-disabled
+      >
+      </po-decimal>
+    </div>
+</po-modal>
+
+<po-modal #semPermissao [p-hide-close]="true">
+    <div class="po-row">
+        <po-widget>
+            <div class="po-row" style="color:red;">
+                <h1 style="color:red; margin:auto;">Atenção:</h1>
+            </div>
+            <div>
+                <p>
+                    <br/>
+                </p>
+            </div>
+            <div class="po-row" style="color:red;">
+                <h3 style="color:red; margin:auto; text-align: center;">Você não possui acesso a esta funcionalidade. Para mais informações,
+                entrar em contato com o cadastrante do seu usuário.</h3>
+            </div>
+        </po-widget>
+    </div>
+</po-modal>
+<!-- </po-page-edit> -->

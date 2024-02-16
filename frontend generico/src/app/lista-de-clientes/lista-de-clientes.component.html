@@ -1,0 +1,83 @@
+<!-- <po-page-edit p-title="Orçamentos" class="p-m-0"> -->
+<po-page-default p-title="Sessão de Clientes">
+    <div class="po-row">
+        <po-input class="po-md-5" name="buscacliente" p-label="Pesquisar cliente" [(ngModel)]="Cliente"
+            (p-change-model)="buscaCliente()" p-icon="po-icon po-icon-search">
+        </po-input>
+
+        <po-button style="margin-left: auto" class="po-m-5" p-label="+ Incluir Cliente" (p-click)="criarCliente()"
+            p-type="primary">
+        </po-button>
+    </div>
+    <po-table [p-hide-columns-manager]="true" [p-sort]="true" [p-striped]="true" p-container="light"
+        [p-columns]="colunas" [p-items]="listaClientes" p-container="shadow">
+    </po-table>
+</po-page-default>
+
+<po-modal #modalCliente [p-primary-action]="confirmaCliente" [p-secondary-action]="cancelarCliente" p-click-out="false"
+    [p-hide-close]="true" p-title="Novo cliente">
+    <form #ProdutoForm="ngForm">
+        <po-divider p-label="Dados gerais"></po-divider>
+        <div class="po-row">
+            <po-select class="po-md-4" [p-required]="true" name="select" p-label="Tipo de Cliente" [p-options]="[
+    { label: 'Físico', value: 'F' },
+    { label: 'Jurídico', value: 'J' }
+  ]" [ngModel]="tipoCliente" (ngModelChange)="tipoCliente = $event">
+            </po-select>
+            <po-input class="po-md-6" p-required name="nome" [(ngModel)]="nome" p-label="Nome">
+            </po-input>
+            <po-combo class="po-md-6" [p-required]="true" name="responsavel" [p-options]="usuarios"
+                p-label="Responsável" [ngModel]="responsavel" (ngModelChange)="responsavel = $event">
+            </po-combo>
+            <po-input *ngIf="this.tipoCliente == 'F';" class="po-md-4" name="cpf" p-mask="999.999.999-99" p-label="CPF"
+                [(ngModel)]="cpfCnpj">
+            </po-input>
+            <po-input *ngIf="this.tipoCliente == 'F';" class="po-md-4" name="RG" [p-maxlength]="9" p-label="RG"
+                [(ngModel)]="rg">
+            </po-input>
+            <po-input class="po-md-4" name="Inscrição estadual" p-label="Inscrição estadual">
+            </po-input>
+            <po-input *ngIf="this.tipoCliente == 'J';" class="po-md-4" name="cnpj" p-mask="99.999.999/9999-99"
+                p-label="CNPJ" [(ngModel)]="cpfCnpj">
+            </po-input>
+            <po-input *ngIf="this.tipoCliente == 'J';" class="po-md-4" name="razaosocial" p-label="Razão Social">
+            </po-input>
+            <po-input *ngIf="this.tipoCliente == 'J';" class="po-md-4" name="Inscrição municipal"
+                p-label="Inscrição municipal">
+            </po-input>
+        </div>
+        <po-divider p-label="Contato"></po-divider>
+        <div class="po-row">
+            <po-input class="po-md-6" name="email" p-label="E-mail" [(ngModel)]="email">
+            </po-input>
+        </div>
+        <div class="po-row">
+            <po-input class="po-md-4" name="telefone" p-mask="(99) 99999-9999" p-label="Telefone comercial"
+                [(ngModel)]="telefoneComercial">
+            </po-input>
+            <po-input class="po-md-4" name="telefone" p-mask="(99) 99999-9999" p-label="Telefone celular"
+                [(ngModel)]="telefoneCelular">
+            </po-input>
+            <po-input class="po-md-4" name="Site" p-label="Site" [(ngModel)]="site">
+            </po-input>
+        </div>
+        <po-divider p-label="Endereço"></po-divider>
+        <div class="po-row">
+            <po-input class="po-md-4" name="CEP" p-mask="99999-999" p-label="CEP" [(ngModel)]="cep">
+            </po-input>
+            <po-input class="po-md-4" name="logradouro" p-label="Logradouro" [(ngModel)]="logradouro">
+            </po-input>
+            <po-input class="po-md-4" name="número" p-label="Número" [(ngModel)]="numero">
+            </po-input>
+            <po-input class="po-md-4" name="complemento" p-label="Complemento" [(ngModel)]="complemento">
+            </po-input>
+            <po-input class="po-md-4" name="bairro" p-label="Bairro" [(ngModel)]="bairro">
+            </po-input>
+            <po-input class="po-md-4" name="UF" p-label="UF" [(ngModel)]="uf">
+            </po-input>
+            <po-input class="po-md-4" name="cidade" p-label="Cidade" [(ngModel)]="cidade">
+            </po-input>
+        </div>
+    </form>
+</po-modal>
+<!-- </po-page-edit> -->

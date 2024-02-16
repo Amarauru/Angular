@@ -1,0 +1,92 @@
+<po-page-default class="po-m-5">
+    <form #formLogin="ngForm">
+      <div class="po-page-login-body">
+        <po-container [p-height]="600" class="po-m-5">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header">
+              <div
+                style="
+                  margin-left: 10px;
+                  margin-right: 10px;
+                  margin-bottom: 50px;
+                  margin-top: 0px;
+                "
+              >
+                <img
+                  style="width: 470px"
+                  src="assets/logo.png"
+                  alt="Cod.ERP Tecnologia"
+                />
+              </div>
+            </div>
+            <div class="po-page-login-form ng-untouched ng-pristine ng-invalid">
+              <div>
+                <po-input
+                  name="usuario"
+                  class="po-sm-12"
+                  [(ngModel)]="user"
+                  p-icon="po-icon-user"
+                  p-label="Usuário"
+                  p-clean="true"
+                  [p-auto-focus]="true"
+                  p-required="true"
+                  [p-optional]="true"
+                  p-placeholder="Insira seu usuário"
+                >
+                </po-input>
+              </div>
+              <div>
+                <po-password
+                  name="password"
+                  class="po-sm-12"
+                  [(ngModel)]="password"
+                  p-label="Senha"
+                  p-clean="true"
+                  p-required="true"
+                  p-placeholder="Insira sua senha"
+                >
+                </po-password>
+              </div>
+              <div>
+                <po-button
+                  class="po-sm-12"
+                  p-label="Entrar"
+                  (p-click)="ClickLogin()"
+                  p-icon="po-icon po-icon-arrow-right"
+                  p-type="primary"
+                >
+                </po-button>
+              </div>
+              <div>
+                <po-button
+                  class="po-row po-sm-12 po-mt-1"
+                  p-label="Esqueceu sua senha?"
+                  (p-click)="passwordRecoveryModal.open()"
+                  p-type="link"
+                >
+                </po-button>
+              </div>
+            </div>
+          </div>
+        </po-container>
+      </div>
+    </form>
+  </po-page-default>
+  
+  <!--
+  <div>
+    <img
+      style="margin-left:70%"
+      class="po-page-login-header-title po-mb-sm-5"
+      src="assets/logo-web-transparent.png"
+      height="30 px"
+      width="40 px"
+    />
+  </div>
+  -->
+  
+  <po-modal-password-recovery
+    #passwordRecoveryModal
+    (p-submit)="EnviaEmail($event)"
+  ></po-modal-password-recovery>
+  

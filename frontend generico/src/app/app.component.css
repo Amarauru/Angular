@@ -1,0 +1,26 @@
+.po-menu-collapse-button,
+.po-menu-item,
+.po-menu-item-no-data {
+    border-top: 1px solid;
+    color: rgb(84, 84, 84);
+    padding: 12px 40px 12px 16px;
+}
+
+
+.hell {
+    position: fixed;
+    display: table;
+    color: rgb(184, 213, 110);
+    margin-left: 80%;
+    margin-top: 0.8%;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1200px) {
+    .hell {
+        width: calc(100% - 1000px);
+        margin-top: 2%;
+        padding-top: 8px;
+        position: fixed;
+    }
+}

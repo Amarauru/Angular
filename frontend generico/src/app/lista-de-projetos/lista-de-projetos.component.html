@@ -1,0 +1,109 @@
+<po-page-default p-title="Sessão de Projetos">
+    <div class="po-row">
+        <po-input class="po-md-5" name="buscaprojetos" p-label="Pesquisar projeto" [(ngModel)]="Projeto"
+            (p-change-model)="buscaProjeto()" p-icon="po-icon po-icon-search">
+        </po-input>
+
+        <po-button style="margin-left: auto" class="po-m-5" p-label="+ Incluir Projeto" (p-click)="criarProjeto()"
+            p-type="primary">
+        </po-button>
+    </div>
+    <po-table [p-hide-columns-manager]="true" [p-sort]="true" [p-striped]="true" p-container="light"
+        [p-columns]="colunas" [p-items]="listaProjetos" p-container="shadow">
+        <ng-template p-table-column-template [p-property]="'progresso'" let-value>
+            <span>‎</span>
+            <po-progress class="po-row" *ngIf="value === 100" [p-status]="progressoSucesso" [p-value]="value"
+                [p-text]="value+'%'"></po-progress>
+            <po-progress class="po-row" *ngIf="value > 100" [p-status]="progressoErro" [p-value]="100"
+                [p-text]="value+'%'"></po-progress>
+            <po-progress class="po-row" *ngIf="value < 100" [p-status]="progressoPadrao" [p-value]="value"
+                [p-text]="value+'%'"></po-progress>
+        </ng-template>
+    </po-table>
+</po-page-default>
+
+<po-modal #criaProjeto p-click-out="false" [p-hide-close]="true" p-size="800" p-title="Novo projeto"
+    [p-primary-action]="confirmaCriaProjeto" [p-secondary-action]="cancelaCriaProjeto">
+    <form #ProdutoForm="ngForm">
+        <div class="po-row">
+            <po-input p-required class="po-md-6" name="nome" p-label="Nome" [(ngModel)]="nome">
+            </po-input>
+            <po-combo [p-required]="true" name="cliente" p-label="Cliente" [p-options]="clientes" [ngModel]="cliente"
+                (ngModelChange)="cliente = $event">
+            </po-combo>
+            <po-combo [p-required]="true" class="po-md-6" name="lider" p-label="Líder de Projeto" [p-options]="usuarios"
+                [ngModel]="lider" (ngModelChange)="lider = $event">
+            </po-combo>
+        </div>
+        <po-divider></po-divider>
+        <po-input p-required [p-minlength]="6" type="time" class="po-md-2" name="horasEstimadas"
+            p-label="Horas Estimadas" [(ngModel)]="horasEstimadas" (p-change-model)="mascaraHorasEstimadas()"
+            [p-mask]="mascara" p-mask-format-model="true">
+        </po-input>
+        <div class="po-row">
+            <po-datepicker p-required class="po-md-4" name="dataInicio" p-label="Data de Início"
+                [(ngModel)]="dataInicio">
+            </po-datepicker>
+            <po-datepicker p-required class="po-md-4" name="dataFim" p-label="Data de Entrega" [(ngModel)]="dataFim">
+            </po-datepicker>
+        </div>
+        <div class="po-row">
+            <po-select [p-required]="true" class="po-md-3" name="status" p-icon="po-icon po-icon-search"
+                p-label="Status" p-sort p-filter-mode="contains" p-change-on-enter="true" [p-options]="[
+                { label: 'Em espera', value: '1' },
+                { label: 'Ativo', value: '2' },
+                { label: 'Concluído', value: '3' },
+                { label: 'Atrasado', value: '4' },
+                { label: 'Adiado', value: '5' },
+                { label: 'Cancelado', value: '6' },
+  ]" [ngModel]="status" (ngModelChange)="status = $event"></po-select>
+        </div>
+        <po-divider></po-divider>
+        <po-textarea [p-required]="true" class="po-m-10" name="filtro" p-label="Descrição"
+            p-placeholder="Informe algum conteúdo adicional e explicativo a respeito do projeto."
+            p-icon="po-icon po-icon-search" [p-maxlength]="250" [(ngModel)]="descricao">
+        </po-textarea>
+    </form>
+</po-modal>
+
+<po-modal #confirmaExclusao [p-primary-action]="excluirProjeto" [p-secondary-action]="cancelaExclusaoProjeto">
+    <div class="po-row">
+        <po-widget>
+            <div class="po-row" style="color:red;">
+                <h1 style="color:red; margin:auto;">Atenção:</h1>
+            </div>
+            <div>
+                <p>
+                    <br />
+                </p>
+            </div>
+            <div class="po-row" style="color:red;">
+                <h3 style="color:red; margin:auto; text-align: center;">Se excluir o devido projeto, tenha em mente que
+                    deletará consequentemente todas as tarefas
+                    e apontamentos a ele vinculado. Segue abaixo a lista de tarefas correspondentes a este projeto:</h3>
+            </div>
+        </po-widget>
+        <div class="po-row">
+            <po-table [p-hide-columns-manager]="true" [p-columns]="colunasTarefas" [p-items]="this.tarefas"></po-table>
+        </div>
+    </div>
+</po-modal>
+
+<po-modal #semPermissao [p-hide-close]="true">
+    <div class="po-row">
+        <po-widget>
+            <div class="po-row" style="color:red;">
+                <h1 style="color:red; margin:auto;">Atenção:</h1>
+            </div>
+            <div>
+                <p>
+                    <br/>
+                </p>
+            </div>
+            <div class="po-row" style="color:red;">
+                <h3 style="color:red; margin:auto; text-align: center;">Você não possui acesso a esta funcionalidade. Para mais informações,
+                entrar em contato com o cadastrante do seu usuário.</h3>
+            </div>
+        </po-widget>
+    </div>
+</po-modal>

@@ -1,0 +1,73 @@
+<po-page-default p-title="Sessão de Cargos">
+    <div class="po-row">
+        <po-input class="po-md-5" name="buscacliente" p-label="Pesquisar cargo" [(ngModel)]="Cargo"
+            (p-change-model)="buscaCargo()" p-icon="po-icon po-icon-search">
+        </po-input>
+
+        <po-button style="margin-left: auto" class="po-m-5" p-label="+ Incluir Cargo" (p-click)="criarCargo()"
+            p-type="primary">
+        </po-button>
+    </div>
+    <po-table [p-hide-columns-manager]="true" [p-sort]="true" [p-striped]="true" p-container="light"
+        [p-columns]="colunas" [p-items]="listaCargos" p-container="shadow">
+    </po-table>
+</po-page-default>
+
+<po-modal #criaCargo [p-primary-action]="confirmaCargo" [p-secondary-action]="cancelaCargo" p-click-out="false" [p-hide-close]="true"
+    p-title="Novo cargo">
+    <form #ProdutoForm="ngForm">
+        <div class="po-row">
+            <po-input class="po-md-6" p-required name="nome" [(ngModel)]="nome" p-label="Nome">
+            </po-input>
+        </div>
+        <div>
+            <p>
+                <br/>
+            </p>
+        </div>
+        <po-table [p-hide-columns-manager]="true" [p-sort]="true" [p-striped]="true" p-container="light"
+            [p-columns]="colunasPermissoes" [p-selectable]="true" [p-items]="permissoes"
+            p-container="shadow" [p-hide-select-all]="true" (p-selected)="selecao($event, 'selecionado')"
+            (p-unselected)="selecao($event, 'desselecionado')"></po-table>
+    </form>
+</po-modal>
+
+<po-modal #alteraCargo [p-primary-action]="confirmaCargo" [p-secondary-action]="cancelaCargo" p-click-out="false" [p-hide-close]="true"
+    p-title="Novo cargo">
+    <form #ProdutoForm="ngForm">
+        <div class="po-row">
+            <po-input class="po-md-6" p-required name="nome" [(ngModel)]="nome" p-label="Nome">
+            </po-input>
+        </div>
+        <div>
+            <p>
+                <br/>
+            </p>
+        </div>
+        <po-table 
+            #POItemsSelected
+            [p-hide-columns-manager]="true" [p-sort]="true" [p-striped]="true" p-container="light"
+            [p-columns]="colunasPermissoes" [p-selectable]="true" [p-items]="permissoes"
+            p-container="shadow" [p-hide-select-all]="true" (p-selected)="selecao($event, 'selecionado')"
+            (p-unselected)="selecao($event, 'desselecionado')"></po-table>
+    </form>
+</po-modal>
+
+<po-modal #semPermissao [p-hide-close]="true">
+    <div class="po-row">
+        <po-widget>
+            <div class="po-row" style="color:red;">
+                <h1 style="color:red; margin:auto;">Atenção:</h1>
+            </div>
+            <div>
+                <p>
+                    <br/>
+                </p>
+            </div>
+            <div class="po-row" style="color:red;">
+                <h3 style="color:red; margin:auto; text-align: center;">Você não possui acesso a esta funcionalidade. Para mais informações,
+                entrar em contato com o cadastrante do seu usuário.</h3>
+            </div>
+        </po-widget>
+    </div>
+</po-modal>

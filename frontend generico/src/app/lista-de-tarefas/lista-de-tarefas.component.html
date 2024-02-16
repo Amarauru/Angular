@@ -1,0 +1,325 @@
+<po-page-default p-title="Sessão de Tarefas">
+    <div class="po-row">
+        <po-input class="po-md-5" name="buscatarefas" p-label="Pesquisar tarefa" [(ngModel)]="Tarefa"
+            (p-change-model)="buscaTarefa()" p-icon="po-icon po-icon-search">
+        </po-input>
+
+        <po-button style="margin-left: auto" class="po-m-5" p-label="+ Incluir Tarefa" (p-click)="criarTarefa()"
+            p-type="primary">
+        </po-button>
+    </div>
+    <po-table [p-columns]="colunas" [p-items]="listaTarefas" [p-hide-columns-manager]="true" [p-sort]="true"
+        [p-striped]="true" p-container="light" p-container="shadow">
+    </po-table>
+</po-page-default>
+
+<po-modal #criaTarefa [p-primary-action]="confirmacriaTarefa" [p-secondary-action]="cancelaTarefa" p-click-out="false"
+    [p-hide-close]="true" p-title="Nova tarefa">
+    <po-tabs>
+        <po-tab [p-active]="true" p-label="Geral">
+            <form #ProdutoForm="ngForm">
+                <div class="po-row">
+                    <po-input class="po-md-6" p-required name="nome" [(ngModel)]="nome" p-label="Nome">
+                    </po-input>
+                    <po-combo name="projeto" [p-required]="true" p-label="Projeto" [p-options]="projetos"
+                        [ngModel]="projeto" (ngModelChange)="projeto = $event">
+                    </po-combo>
+                    <po-combo class="po-md-6" [p-required]="true" name="responsavel" [p-options]="usuarios"
+                        p-label="Responsável" [ngModel]="responsavel" (ngModelChange)="responsavel = $event">
+                    </po-combo>
+                    <po-select class="po-md-3" [p-required]="true" name="etapa" p-icon="po-icon po-icon-search"
+                        p-label="Etapa" p-sort p-filter-mode="contains" [ngModel]="etapa"
+                        (ngModelChange)="etapa = $event" p-change-on-enter="true" [p-options]="[
+                    { label: 'Em espera', value: '1' },
+                    { label: 'Ativo', value: '2' },
+                    { label: 'Concluído', value: '3' },
+                    { label: 'Atrasado', value: '4' },
+                    { label: 'Adiado', value: '5' },
+                    { label: 'Cancelado', value: '6' },
+        ]">
+                    </po-select>
+                </div>
+                <po-divider></po-divider>
+                <po-input type="time" [p-minlength]="6" class="po-md-2" name="horasEstimadas" p-label="Horas Estimadas"
+                    [(ngModel)]="horasEstimadas" (p-change-model)="mascaraHorasEstimadas()" [p-mask]="mascara"
+                    p-mask-format-model="true">
+                </po-input>
+                <div class="po-row">
+                    <po-datepicker p-required class="po-md-5" name="dataInicio" p-label="Data de Início"
+                        [(ngModel)]="dataInicio">
+                    </po-datepicker>
+                    <po-datepicker p-required class="po-md-5" name="dataFim" p-label="Data de Entrega"
+                        [(ngModel)]="dataFim">
+                    </po-datepicker>
+                </div>
+                <div class="po-row">
+                    <po-select [p-required]="true" t class="po-md-3" name="prioridade" p-icon="po-icon po-icon-search"
+                        p-label="Prioridade" p-sort p-filter-mode="contains" p-change-on-enter="true" [p-options]="[
+                        { label: 'Baixa', value: '1' },
+                        { label: 'Média', value: '2' },
+                        { label: 'Alta', value: '3' },
+                        { label: 'Urgente', value: '4' }
+          ]" [ngModel]="prioridade" (ngModelChange)="prioridade = $event"></po-select>
+                    <po-select [p-required]="true" class="po-md-3" name="tipo" p-icon="po-icon po-icon-search"
+                        p-label="Tipo" p-sort p-filter-mode="contains" p-change-on-enter="true" [p-options]="[
+                        { label: 'Desenvolvimento', value: '1' },
+                        { label: 'Suporte técnico', value: '2' },
+                        { label: 'Ajuste', value: '3' },
+                        { label: 'Orçamento', value: '4' }
+          ]" [ngModel]="tipo" (ngModelChange)="tipo = $event"></po-select>
+                </div>
+                <po-divider></po-divider>
+                <po-textarea class="po-m-10" name="filtro" p-label="Descrição"
+                    p-placeholder="Informe algum conteúdo adicional e explicativo a respeito da tarefa."
+                    p-icon="po-icon po-icon-search" [p-maxlength]="250" [(ngModel)]="descricao">
+                </po-textarea>
+            </form>
+        </po-tab>
+        <po-tab p-label="Subtarefas">
+            <div>
+                <br>
+            </div>
+            <div>
+                <br>
+            </div>
+            <po-progress class="po-row" [p-value]="barraProgresso" [p-info]="barraProgresso+'%'"></po-progress>
+            <po-divider class="po-m-10"> </po-divider>
+            <po-button p-icon="po-icon po-icon-plus-circle" p-label="Adicionar" p-type="link"
+                (p-click)="adicionaSubtarefa()"></po-button>
+            <div class="po-row">
+                <po-table #POItemsSelected [p-hide-columns-manager]="true" [p-sort]="true" [p-striped]="true"
+                    p-container="light" [p-columns]="colunasSub" [p-selectable]="true" [p-items]="subtarefas"
+                    p-container="shadow" [p-hide-select-all]="true" (p-selected)="selecao($event, 'selecionado')"
+                    (p-unselected)="selecao($event, 'desselecionado')"></po-table>
+            </div>
+        </po-tab>
+    </po-tabs>
+</po-modal>
+
+
+<po-modal #alteraTarefa [p-primary-action]="confirmacriaTarefa" [p-size]="tamanhoModal"
+    [p-secondary-action]="cancelaTarefa" p-click-out="false" [p-hide-close]="true" p-title="Nova tarefa">
+    <po-tabs>
+        <po-tab [p-active]="true" p-label="Geral">
+            <div class="po-lg-6">
+                <form #ProdutoForm="ngForm">
+                    <div class="po-row">
+                        <po-input class="po-md-6" name="nome" [(ngModel)]="nome" p-label="Nome">
+                        </po-input>
+                        <po-combo name="projeto" p-label="Projeto" [p-options]="projetos" [ngModel]="projeto"
+                            (ngModelChange)="projeto = $event">
+                        </po-combo>
+                        <po-combo class="po-md-6" name="responsavel" [p-options]="usuarios" p-label="Responsável"
+                            [ngModel]="responsavel" (ngModelChange)="responsavel = $event">
+                        </po-combo>
+                        <po-select class="po-md-3" name="etapa" p-icon="po-icon po-icon-search" p-label="Etapa" p-sort
+                            p-filter-mode="contains" [ngModel]="etapa" (ngModelChange)="etapa = $event"
+                            p-change-on-enter="true" [p-options]="[
+                    { label: 'Em espera', value: '1' },
+                    { label: 'Ativo', value: '2' },
+                    { label: 'Concluído', value: '3' },
+                    { label: 'Atrasado', value: '4' },
+                    { label: 'Adiado', value: '5' },
+                    { label: 'Cancelado', value: '6' },
+        ]">
+                        </po-select>
+                    </div>
+                    <po-divider></po-divider>
+                    <po-input type="time" class="po-md-2" name="horasEstimadas" p-label="Horas Estimadas"
+                        [(ngModel)]="horasEstimadas" (p-change-model)="mascaraHorasEstimadas()" [p-mask]="mascara"
+                        p-mask-format-model="true">
+                    </po-input>
+                    <div class="po-row">
+                        <po-datepicker class="po-md-5" name="dataInicio" p-label="Data de Início"
+                            [(ngModel)]="dataInicio">
+                        </po-datepicker>
+                        <po-datepicker class="po-md-5" name="dataFim" p-label="Data de Entrega" [(ngModel)]="dataFim">
+                        </po-datepicker>
+                    </div>
+                    <div class="po-row">
+                        <po-select class="po-md-3" name="prioridade" p-icon="po-icon po-icon-search"
+                            p-label="Prioridade" p-sort p-filter-mode="contains" p-change-on-enter="true" [p-options]="[
+                        { label: 'Baixa', value: '1' },
+                        { label: 'Média', value: '2' },
+                        { label: 'Alta', value: '3' },
+                        { label: 'Urgente', value: '4' }
+          ]" [ngModel]="prioridade" (ngModelChange)="prioridade = $event"></po-select>
+                        <po-select class="po-md-3" name="tipo" p-icon="po-icon po-icon-search" p-label="Tipo" p-sort
+                            p-filter-mode="contains" p-change-on-enter="true" [p-options]="[
+                        { label: 'Desenvolvimento', value: '1' },
+                        { label: 'Suporte técnico', value: '2' },
+                        { label: 'Ajuste', value: '3' },
+                        { label: 'Orçamento', value: '4' }
+          ]" [ngModel]="tipo" (ngModelChange)="tipo = $event"></po-select>
+                    </div>
+                    <po-divider></po-divider>
+                    <po-textarea class="po-m-10" name="filtro" p-label="Descrição"
+                        p-placeholder="Informe algum conteúdo adicional e explicativo a respeito da tarefa."
+                        p-icon="po-icon po-icon-search" [p-maxlength]="250" [(ngModel)]="descricao">
+                    </po-textarea>
+                </form>
+            </div>
+            <div class="po-lg-6">
+                <po-rich-text [(ngModel)]="comentario" p-placeholder="Escreva um comentário..."></po-rich-text>
+                <div class="po-row">
+                    <po-button class="po-md-3" (p-click)="incluirComentario()" p-label="Comentar"
+                        p-type="primary"></po-button>
+                    <po-button class="po-md-3" p-label="Cancelar" p-type="secondary"></po-button>
+                </div>
+                <po-divider class="po-m-10"></po-divider>
+                <h2>Comentários</h2>
+                <po-container [p-height]="633">
+                    <div clas="po-row">
+                        <ng-template ngFor let-item [ngForOf]="comentarios" let-i="index">
+                            <div class="po-row">
+                                <po-avatar p-size="md" [p-src]="comentarios[i][0]"></po-avatar>
+                                <po-info [p-value]="comentarios[i][1]"></po-info>
+                                <po-button
+                                    *ngIf="comentarios[i][3] == usuarioId && !(editaComentario && i == numeroComentario);"
+                                    style="margin-left: auto;" p-label="Editar" p-type="link"
+                                    (p-click)="editarComentario(i)"></po-button>
+                                <po-button
+                                    *ngIf="comentarios[i][3] == usuarioId && (editaComentario && i == numeroComentario)"
+                                    style="margin-left: auto;" p-label="Confirmar" (p-click)="confirmarComentario(i)"
+                                    p-type="link"></po-button>
+                                <po-button
+                                    *ngIf="comentarios[i][3] == usuarioId && (editaComentario && i == numeroComentario)"
+                                    p-label="Cancelar" p-type="link" (p-click)="cancelarComentario()"></po-button>
+                                <po-button
+                                    *ngIf="comentarios[i][3] == usuarioId && !(editaComentario && i == numeroComentario);"
+                                    p-label="Excluir" (p-click)="excluirComentario(i)" p-type="link"></po-button>
+                                <div class="po-row">
+                                    <po-widget style="margin-left:10%; margin-top: -4.8%; text-align: left;"
+                                        class="caixaComentario">
+                                        <div *ngIf="i !== numeroComentario" [innerHTML]="comentarios[i][2]"></div>
+                                        <po-rich-text *ngIf="editaComentario && i == numeroComentario"
+                                            [(ngModel)]="comentarioEditado"></po-rich-text>
+                                    </po-widget>
+                                </div>
+                                <po-info style="margin-left: 10%;" [p-label]="comentarios[i][4]"></po-info>
+                            </div>
+                        </ng-template>
+                    </div>
+                </po-container>
+            </div>
+        </po-tab>
+        <po-tab p-label="Subtarefas">
+            <div>
+                <br>
+            </div>
+            <div>
+                <br>
+            </div>
+            <po-progress class="po-row" [p-value]="barraProgresso" [p-info]="barraProgresso+'%'"></po-progress>
+            <po-divider class="po-m-10"> </po-divider>
+            <po-button p-icon="po-icon po-icon-plus-circle" p-label="Adicionar" p-type="link"
+                (p-click)="adicionaSubtarefa()"></po-button>
+            <div class="po-row">
+                <po-checkbox-group class="po-md-11" [ngModel]="SubTarefas" (ngModelChange)="SubTarefas = $event"
+                    (p-change)="atualizaProgresso()" [p-columns]="1" [p-options]="opcoes">
+                </po-checkbox-group>
+                <div class="po-md-1">
+                    <ng-template ngFor let-item [ngForOf]="opcoes" let-i="index">
+                        <po-button style="margin-top: 11%;" p-label="X" (p-click)="deletaSubTarefa(i)"
+                            p-type="link"></po-button>
+                    </ng-template>
+                </div>
+            </div>
+        </po-tab>
+        <po-tab [p-active]="true" p-label="Anexos">
+            <form action="http://localhost:3000/uploadanexos" method="post" enctype="multipart/form-data">
+                <input type="file" name='file' placeholder="Selecione um arquivo." />
+                <br />
+                <button type="submit">Upload</button>
+            </form>
+            <po-table [p-hide-columns-manager]="true" [p-columns]="anexados" [p-items]="this.Anexos"></po-table>
+        </po-tab>
+    </po-tabs>
+</po-modal>
+
+
+<po-modal #criaSubtarefa [p-primary-action]="confirmaCriaSubtarefa">
+    <form #ProdutoForm="ngForm">
+        <div class="po-row">
+            <po-input class="po-md-6" p-required name="nome" [(ngModel)]="nomeSubtarefa" p-label="Nome">
+            </po-input>
+            <po-combo class="po-md-6" [p-required]="true" name="responsavel" [p-options]="usuarios"
+                p-label="Responsável" [ngModel]="responsavelSubtarefa" (ngModelChange)="responsavelSubtarefa = $event">
+            </po-combo>
+            <po-select class="po-md-3" [p-required]="true" name="etapa" p-icon="po-icon po-icon-search" p-label="Etapa"
+                p-sort p-filter-mode="contains" [ngModel]="etapaSubtarefa" (ngModelChange)="etapaSubtarefa = $event"
+                p-change-on-enter="true" [p-options]="[
+            { label: 'A Fazer', value: '1' },
+            { label: 'Em andamento', value: '2' },
+            { label: 'Finalizada', value: '3' }
+]">
+            </po-select>
+        </div>
+        <po-divider></po-divider>
+        <po-input [p-minlength]="5" class="po-md-2" name="horas" p-label="Horas"
+                    [(ngModel)]="horasSubtarefa" (p-change-model)="mascaraHorasSubtarefa()" [p-mask]="mascara"
+                    p-mask-format-model="true">
+                </po-input>
+        <div class="po-row">
+            <po-datepicker p-required class="po-md-5" name="dataInicio" p-label="Data de Início"
+                [(ngModel)]="dataInicioSubtarefa">
+            </po-datepicker>
+            <po-datepicker p-required class="po-md-5" name="dataFim" p-label="Data de Entrega" [(ngModel)]="dataFimSubtarefa">
+            </po-datepicker>
+        </div>
+        <po-divider></po-divider>
+        <po-textarea class="po-m-10" name="filtro" p-label="Descrição"
+            p-placeholder="Informe algum conteúdo adicional e explicativo a respeito da tarefa."
+            p-icon="po-icon po-icon-search" [p-maxlength]="250" [(ngModel)]="descricaoSubtarefa">
+        </po-textarea>
+    </form>
+</po-modal>
+
+<po-modal #projetoEstourado [p-primary-action]="confirmaAtualizaProjeto" [p-secondary-action]="cancelaAtualizaProjeto">
+    <div class="po-row">
+        <po-widget>
+            <div class="po-row" style="color:red;">
+                <h1 style="color:red; margin:auto;">Atenção:</h1>
+            </div>
+            <div>
+                <p>
+                    <br />
+                </p>
+            </div>
+            <div class="po-row" style="color:red;">
+                <h3 style="color:red; margin:auto; text-align: center;">{{ this.mensagem }}</h3>
+            </div>
+        </po-widget>
+        <div class="po-row">
+            <h2 style="margin: auto; text-align: center;">Projeto: {{ this.Projeto }}</h2>
+        </div>
+        <div class="po-row">
+            <po-input p-disabled style="margin: auto;" class="po-md-3" name="horasTotais"
+                p-label="Total de horas estimadas em tarefas" [(ngModel)]="horasTarefas">
+            </po-input>
+            <po-input p-disabled style="margin: auto;" class="po-md-3" name="horasProjeto"
+                p-label="Horas estimadas ao projeto" [(ngModel)]="horasProjeto">
+            </po-input>
+        </div>
+    </div>
+</po-modal>
+
+<po-modal #semPermissao [p-hide-close]="true">
+    <div class="po-row">
+        <po-widget>
+            <div class="po-row" style="color:red;">
+                <h1 style="color:red; margin:auto;">Atenção:</h1>
+            </div>
+            <div>
+                <p>
+                    <br />
+                </p>
+            </div>
+            <div class="po-row" style="color:red;">
+                <h3 style="color:red; margin:auto; text-align: center;">Você não possui acesso a esta funcionalidade.
+                    Para mais informações,
+                    entrar em contato com o cadastrante do seu usuário.</h3>
+            </div>
+        </po-widget>
+    </div>
+</po-modal>
